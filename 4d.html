@@ -1,0 +1,73 @@
+<h2 class="sr-only">مجسم ثلاثي الأبعاد تفاعلي لشقة الدور الأول، يمكن تدويره وتكبيره، وتبديل الحيطان بين مقطوعة وكاملة</h2>
+<div id="wrap" style="position:relative;width:100%;height:460px;touch-action:none;cursor:grab;overflow:hidden"></div>
+<div style="display:flex;justify-content:center;gap:10px;padding:8px 0;flex-wrap:wrap">
+<button id="b1" style="padding:8px 16px;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-1);color:var(--text-primary);font-family:var(--font-sans);font-size:14px;cursor:pointer">حيطان كاملة</button>
+<button id="b2" style="padding:8px 16px;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-1);color:var(--text-primary);font-family:var(--font-sans);font-size:14px;cursor:pointer">دوران تلقائي: شغّال</button>
+<button id="b3" style="padding:8px 16px;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-1);color:var(--text-primary);font-family:var(--font-sans);font-size:14px;cursor:pointer">منظر من فوق</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var wrap=document.getElementById('wrap'),w=wrap.clientWidth||680,h=460;
+var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setSize(w,h);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+wrap.appendChild(renderer.domElement);
+var scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,w/h,0.1,200);
+scene.add(new THREE.HemisphereLight(0xffffff,0xb9b1a2,0.8));
+var sun=new THREE.DirectionalLight(0xfff2dc,0.9);sun.position.set(-9,18,12);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+var sc=sun.shadow.camera;sc.left=-14;sc.right=14;sc.top=14;sc.bottom=-14;sc.near=1;sc.far=60;sun.shadow.bias=-0.0005;scene.add(sun);
+var OX=7,OZ=5.625;
+function mat(c,r){return new THREE.MeshStandardMaterial({color:c,roughness:r==null?0.85:r})}
+function box(x0,y0,x1,y1,z0,z1,col,r){var m=new THREE.Mesh(new THREE.BoxGeometry(x1-x0,z1-z0,y1-y0),mat(col,r));m.position.set((x0+x1)/2-OX,(z0+z1)/2,(y0+y1)/2-OZ);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m}
+box(-1.2,-1.2,15.2,12.45,-0.35,-0.05,'#8A8578');
+var floors=[[0,0,1.2,11.25,'#CFCBC0'],[1.2,0,5.7,3.75,'#D9B98A'],[1.2,3.75,5.7,7.5,'#D9B98A'],[1.2,7.5,5.7,11.25,'#D9B98A'],[5.7,0,7,11.25,'#E6DFCF'],[7,0,11,3.5,'#BFD8CF'],[7,2,8.5,3.5,'#6F7F70'],[11,0,14,2,'#6F7F70'],[7,3.5,9,5,'#B5D3DE'],[7,5,9,6.5,'#B5D3DE'],[9,3.5,11,6.5,'#E8D7B6'],[7,6.5,12.8,11.25,'#E8D7B6'],[11,2,14,6.5,'#DAD5C9'],[12.8,6.5,14,11.25,'#CFCBC0']];
+floors.forEach(function(f){box(f[0],f[1],f[2],f[3],-0.05,0,f[4],0.95)});
+var walls=[],lint=[];
+function wall(o,p,a0,a1,gaps,t,col){var cur=a0,segs=[];gaps.forEach(function(g){if(g[0]>cur)segs.push([cur,g[0]]);cur=g[1]});if(cur<a1)segs.push([cur,a1]);
+function mk(s,list){var m=o=='h'?box(s[0],p-t/2,s[1],p+t/2,0,1,col):box(p-t/2,s[0],p+t/2,s[1],0,1,col);list.push(m)}
+segs.forEach(function(s){mk(s,walls)});gaps.forEach(function(g){mk(g,lint)})}
+var Wc='#F5F2EB';
+wall('h',0,0,14,[],0.2,Wc);wall('h',11.25,0,14,[],0.2,Wc);
+wall('v',1.2,0,11.25,[[1.4,2.4],[5.1,6.1],[8.9,9.9]],0.15,Wc);
+wall('h',3.75,1.2,5.7,[],0.12,Wc);wall('h',7.5,1.2,5.7,[],0.12,Wc);
+wall('v',5.7,0,11.25,[[2.6,3.4],[6.4,7.1],[10.1,10.9]],0.12,Wc);
+wall('v',7,0,11.25,[[0.75,1.75],[3.9,4.6],[8.25,10]],0.12,Wc);
+wall('h',3.5,7,11,[],0.12,Wc);wall('h',5,7,9,[],0.1,Wc);wall('v',9,3.5,6.5,[],0.12,Wc);
+wall('h',6.5,7,9,[[7.4,8.4]],0.12,Wc);wall('h',6.5,11,14,[],0.12,Wc);
+wall('v',11,0,6.5,[[0.25,1.75],[4.75,5.75]],0.12,Wc);
+wall('h',2,11,14,[],0.12,Wc);wall('v',14,2,6.5,[],0.2,Wc);
+wall('v',12.8,6.5,11.25,[[8.2,9.6]],0.12,Wc);
+wall('h',2,7,8.5,[],0.1,Wc);wall('v',8.5,2,3.5,[],0.1,Wc);
+box(-0.03,0,0.03,11.25,0,0.9,'#BFD6E0',0.3);box(13.97,6.5,14.03,11.25,0,0.9,'#BFD6E0',0.3);
+box(-0.08,0,0.08,0.1,0,0.95,'#8A8578');box(-0.08,11.15,0.08,11.25,0,0.95,'#8A8578');
+function setH(H){walls.forEach(function(m){m.scale.y=H;m.position.y=H/2});lint.forEach(function(m){m.visible=H>2.2;var hh=Math.max(H-2.1,0.01);m.scale.y=hh;m.position.y=2.1+hh/2})}
+setH(1);
+box(2.5,0.15,4.1,2.15,0,0.4,'#7F9CC4');box(2.5,3.9,4.1,5.9,0,0.4,'#7F9CC4');box(2.5,7.65,4.1,9.65,0,0.4,'#7F9CC4');
+[0.2,3.95,7.7].forEach(function(y){box(2.6,y,3.2,y+0.5,0.4,0.48,'#FFFFFF');box(3.4,y,4.0,y+0.5,0.4,0.48,'#FFFFFF');box(2.3,y-0.02,4.3,y+0.02,0,0.7,'#8B6B4A');box(2.0,y+0.05,2.4,y+0.45,0,0.45,'#B58F6A');box(4.2,y+0.05,4.6,y+0.45,0,0.45,'#B58F6A')});
+box(4.95,0.15,5.6,1.9,0,2.1,'#A98559');box(4.95,3.9,5.6,5.6,0,2.1,'#A98559');box(4.95,7.65,5.6,9.4,0,2.1,'#A98559');
+box(7.15,0.15,10.85,0.8,0,0.9,'#C7AA7E');box(7.15,0.15,10.85,0.8,0.9,0.95,'#5E5A52');box(10.3,2.7,10.85,3.35,0,1.8,'#C9D0D4',0.4);
+box(7.5,10.4,10.6,11.1,0,0.45,'#6F8F8A');box(7.5,10.8,10.6,11.1,0.45,0.9,'#6F8F8A');box(8.4,9,9.8,9.8,0,0.3,'#8B6B4A');box(7.2,8.6,7.5,9.6,0,0.2,'#8A857A');
+box(7.2,3.7,7.7,4.2,0,0.4,'#FFFFFF',0.3);box(7.2,5.2,7.7,5.7,0,0.4,'#FFFFFF',0.3);box(8.3,3.7,8.8,4.2,0,0.85,'#FFFFFF',0.3);
+for(var i=0;i<8;i++){box(11.3,5.7-0.5*i,13.7,6.2-0.5*i,0,0.13*(i+1),'#C9C3B6')}
+var labels=[[3.4,3.15,'غرفة 1'],[3.4,6.9,'غرفة 2'],[3.4,10.6,'غرفة 3'],[9.6,1.7,'مطبخ'],[7.75,2.75,'منور'],[8,4.6,'حمام'],[8.2,5.9,'حمام 2'],[10.3,8.2,'ريسبشن'],[10,5.3,'باب الشقة'],[12.5,4.1,'السلم'],[12.5,1,'فتحة الممر'],[0.6,5.6,'بلكونة'],[13.4,9,'بلكونة']];
+var edges=[[-1.9,5.6,'شارع غربي'],[7,-1.9,'جار (شمال)'],[15.9,5.6,'شارع شرقي'],[7,13.2,'جار (جنوب)']];
+var els=[];
+function mk(l,edge){var d=document.createElement('div');d.textContent=l[2];d.style.cssText='position:absolute;left:0;top:0;font:12px var(--font-sans);pointer-events:none;white-space:nowrap;'+(edge?'color:var(--text-secondary)':'color:#3B372F;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff');wrap.appendChild(d);els.push({d:d,v:new THREE.Vector3(l[0]-OX,edge?0:0.05,l[1]-OZ)})}
+labels.forEach(function(l){mk(l,false)});edges.forEach(function(l){mk(l,true)});
+var th=0.5,ph=0.95,rad=25,auto=true,tgt=new THREE.Vector3(0,0.3,0),tph=null;
+function place(){var x=tgt.x+rad*Math.sin(ph)*Math.sin(th),y=tgt.y+rad*Math.cos(ph),z=tgt.z+rad*Math.sin(ph)*Math.cos(th);camera.position.set(x,y,z);camera.lookAt(tgt)}
+var drag=false,px=0,py=0;
+renderer.domElement.addEventListener('pointerdown',function(e){drag=true;px=e.clientX;py=e.clientY;auto=false;b2.textContent='دوران تلقائي: واقف';wrap.style.cursor='grabbing';renderer.domElement.setPointerCapture(e.pointerId)});
+renderer.domElement.addEventListener('pointermove',function(e){if(!drag)return;th-=(e.clientX-px)*0.008;ph=Math.min(1.5,Math.max(0.1,ph-(e.clientY-py)*0.006));px=e.clientX;py=e.clientY});
+renderer.domElement.addEventListener('pointerup',function(){drag=false;wrap.style.cursor='grab'});
+renderer.domElement.addEventListener('wheel',function(e){e.preventDefault();rad=Math.min(45,Math.max(10,rad+e.deltaY*0.02))},{passive:false});
+var b1=document.getElementById('b1'),b2=document.getElementById('b2'),b3=document.getElementById('b3'),full=false;
+b1.onclick=function(){full=!full;setH(full?2.8:1);b1.textContent=full?'حيطان مقطوعة':'حيطان كاملة'};
+b2.onclick=function(){auto=!auto;b2.textContent=auto?'دوران تلقائي: شغّال':'دوران تلقائي: واقف'};
+b3.onclick=function(){tph=0.12;auto=false;b2.textContent='دوران تلقائي: واقف'};
+function loop(){requestAnimationFrame(loop);if(auto)th+=0.003;if(tph!==null){ph+=(tph-ph)*0.08;if(Math.abs(tph-ph)<0.005)tph=null}place();
+els.forEach(function(o){var v=o.v.clone().project(camera);o.d.style.display=v.z>1?'none':'block';o.d.style.transform='translate('+((v.x*0.5+0.5)*w).toFixed(0)+'px,'+((-v.y*0.5+0.5)*h).toFixed(0)+'px) translate(-50%,-50%)'});
+renderer.render(scene,camera)}
+window.addEventListener('resize',function(){w=wrap.clientWidth||w;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix()});
+loop();
+</script>
