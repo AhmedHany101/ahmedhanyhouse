@@ -1,0 +1,46 @@
+<h2 class="sr-only">منظر ثلاثي الأبعاد من فوق لشقة الدور الأول وباب الحمام الثاني يفتح على الريسبشن، مع إمكانية تدوير المنظر</h2>
+<svg id="sc" width="100%" viewBox="0 0 680 440" role="img"><title>منظر ثلاثي الأبعاد للشقة</title><desc>منظر أيزومتري من فوق لشقة الدور الأول يظهر الأوض والريسبشن والمطبخ والسلم والبلكونات والمنور، والحمام الثاني بابه من الريسبشن</desc><g id="g"></g></svg>
+<div style="display:flex;justify-content:center;padding:4px 0 8px"><button onclick="turn()" style="padding:8px 18px;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface-1);color:var(--text-primary);font-family:var(--font-sans);font-size:14px;cursor:pointer"><i class="ti ti-rotate-clockwise" aria-hidden="true"></i> لفّ المنظر</button></div>
+<script>
+var c=0.866,s=27,ox=340,oy=215,cx=7,cy=5.625,k=0;
+var floors=[[0,0,1.2,11.25,'#D6D2C8'],[1.2,0,5.7,3.75,'#E4D2B4'],[1.2,3.75,5.7,7.5,'#E4D2B4'],[1.2,7.5,5.7,11.25,'#E4D2B4'],[5.7,0,7,11.25,'#ECE7DB'],[7,0,11,3.5,'#D5E6DF'],[7,2,8.5,3.5,'#8E9C8C'],[11,0,14,2,'#8E9C8C'],[7,3.5,9,5,'#C9E0E8'],[7,5,9,6.5,'#C9E0E8'],[9,3.5,11,6.5,'#F0E4CE'],[7,6.5,12.8,11.25,'#F0E4CE'],[11,2,14,6.5,'#E2DED4'],[12.8,6.5,14,11.25,'#D6D2C8']];
+var boxes=[];
+function wall(o,p,a0,a1,gaps,h,t,col){var cur=a0,out=[];gaps.forEach(function(g){if(g[0]>cur)out.push([cur,g[0]]);cur=g[1]});if(cur<a1)out.push([cur,a1]);out.forEach(function(sg){if(o=='h')boxes.push({x0:sg[0],x1:sg[1],y0:p-t/2,y1:p+t/2,h:h,c:col});else boxes.push({x0:p-t/2,x1:p+t/2,y0:sg[0],y1:sg[1],h:h,c:col})})}
+var W='#F4F1EA';
+wall('h',0,0,14,[],1,0.2,W);wall('h',11.25,0,14,[],1,0.2,W);
+wall('v',1.2,0,11.25,[[1.4,2.4],[5.1,6.1],[8.9,9.9]],1,0.15,W);
+wall('h',3.75,1.2,5.7,[],1,0.12,W);wall('h',7.5,1.2,5.7,[],1,0.12,W);
+wall('v',5.7,0,11.25,[[2.6,3.4],[6.4,7.1],[10.1,10.9]],1,0.12,W);
+wall('v',7,0,11.25,[[0.75,1.75],[3.9,4.6],[8.25,10]],1,0.12,W);
+wall('h',3.5,7,11,[],1,0.12,W);wall('h',5,7,9,[],1,0.1,W);wall('v',9,3.5,6.5,[],1,0.12,W);
+wall('h',6.5,7,9,[[7.4,8.4]],1,0.12,W);wall('h',6.5,11,14,[],1,0.12,W);
+wall('v',11,0,6.5,[[0.25,1.75],[4.75,5.75]],1,0.12,W);
+wall('h',2,11,14,[],1,0.12,W);wall('v',14,2,6.5,[],1,0.2,W);
+wall('v',12.8,6.5,11.25,[[8.2,9.6]],1,0.12,W);
+wall('h',2,7,8.5,[],1,0.1,W);wall('v',8.5,2,3.5,[],1,0.1,W);
+wall('v',0,0,11.25,[],0.45,0.06,'#E9E6DF');wall('v',14,6.5,11.25,[],0.45,0.06,'#E9E6DF');
+function b(x0,y0,x1,y1,h,col){boxes.push({x0:x0,y0:y0,x1:x1,y1:y1,h:h,c:col})}
+b(2.5,0.15,4.1,2.15,0.35,'#9DB7D5');b(2.5,3.9,4.1,5.9,0.35,'#9DB7D5');b(2.5,7.65,4.1,9.65,0.35,'#9DB7D5');
+b(4.95,0.15,5.6,1.9,0.9,'#B58F6A');b(4.95,3.9,5.6,5.6,0.9,'#B58F6A');b(4.95,7.65,5.6,9.4,0.9,'#B58F6A');
+b(7.15,0.15,10.85,0.8,0.5,'#C9B08A');b(10.3,2.7,10.85,3.35,0.95,'#BFC7CC');
+b(7.5,10.45,10.6,11.1,0.45,'#8FA5A0');b(8.4,9,9.8,9.8,0.25,'#B58F6A');
+b(7.2,3.7,7.7,4.2,0.35,'#FFFFFF');b(7.2,5.2,7.7,5.7,0.35,'#FFFFFF');
+for(var i=0;i<8;i++){b(11.3,5.7-0.5*i,13.7,6.2-0.5*i,0.11*(i+1),'#CFCAC0')}
+var labels=[[3.4,3.1,'غرفة 1'],[3.4,6.8,'غرفة 2'],[3.4,10.5,'غرفة 3'],[9.7,1.6,'مطبخ'],[7.75,2.85,'منور'],[8,4.35,'حمام'],[8.2,5.85,'حمام 2'],[10.3,8.4,'ريسبشن'],[10,5.2,'باب الشقة'],[12.5,4.1,'السلم'],[12.5,1,'فتحة الممر'],[0.6,5.6,'بلكونة'],[13.4,9,'بلكونة']];
+var edges=[[-1.6,5.6,'شارع غربي'],[7,-1.6,'جار (شمال)'],[15.6,5.6,'شارع شرقي'],[7,12.9,'جار (جنوب)']];
+function rot(x,y){var dx=x-cx,dy=y-cy,t;for(var i=0;i<k;i++){t=dx;dx=-dy;dy=t}return[dx,dy]}
+function P(dx,dy,z){return[ox+(dx-dy)*c*s,oy+(dx+dy)*0.5*s-z*s]}
+function shade(h,f){var n=parseInt(h.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,bl=n&255;return'rgb('+Math.round(r*f)+','+Math.round(g*f)+','+Math.round(bl*f)+')'}
+function pts(a){return a.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')}
+function poly(a,fill,st){return'<polygon points="'+pts(a)+'" fill="'+fill+'" stroke="'+st+'" stroke-width="0.5" stroke-linejoin="round"/>'}
+function nb(o){var a=rot(o.x0,o.y0),d=rot(o.x1,o.y1);return{x0:Math.min(a[0],d[0]),x1:Math.max(a[0],d[0]),y0:Math.min(a[1],d[1]),y1:Math.max(a[1],d[1]),h:o.h,c:o.c}}
+function behind(A,B){var e=1e-6;if(A.x1<=B.x0+e&&!(B.y1<=A.y0+e))return true;if(A.y1<=B.y0+e&&!(B.x1<=A.x0+e))return true;return false}
+function sortBoxes(bs){bs.sort(function(a,d){return(a.x0+a.y0)-(d.x0+d.y0)});var seen=[],out=[];function v(j){if(seen[j])return;seen[j]=1;for(var i=0;i<bs.length;i++){if(i!=j&&behind(bs[i],bs[j]))v(i)}out.push(bs[j])}for(var j=0;j<bs.length;j++)v(j);return out}
+function draw(){var h='';floors.forEach(function(f){var a=rot(f[0],f[1]),d=rot(f[2],f[3]),x0=Math.min(a[0],d[0]),x1=Math.max(a[0],d[0]),y0=Math.min(a[1],d[1]),y1=Math.max(a[1],d[1]);h+=poly([P(x0,y0,0),P(x1,y0,0),P(x1,y1,0),P(x0,y1,0)],f[4],'#9A9588')});
+sortBoxes(boxes.map(nb)).forEach(function(o){var x0=o.x0,x1=o.x1,y0=o.y0,y1=o.y1,z=o.h,st='#8A857A';h+=poly([P(x0,y1,0),P(x1,y1,0),P(x1,y1,z),P(x0,y1,z)],shade(o.c,0.84),st);h+=poly([P(x1,y0,0),P(x1,y1,0),P(x1,y1,z),P(x1,y0,z)],shade(o.c,0.7),st);h+=poly([P(x0,y0,z),P(x1,y0,z),P(x1,y1,z),P(x0,y1,z)],o.c,st)});
+labels.forEach(function(l){var r=rot(l[0],l[1]),p=P(r[0],r[1],0.02);h+='<text class="ts" x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" text-anchor="middle" style="fill:#3B372F;paint-order:stroke;stroke:#FFFFFF;stroke-width:3px;stroke-linejoin:round">'+l[2]+'</text>'});
+edges.forEach(function(l){var r=rot(l[0],l[1]),p=P(r[0],r[1],0);h+='<text class="ts" x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" text-anchor="middle">'+l[2]+'</text>'});
+document.getElementById('g').innerHTML=h}
+function turn(){k=(k+1)%4;draw()}
+draw();
+</script>
